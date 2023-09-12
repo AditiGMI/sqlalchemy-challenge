@@ -105,8 +105,8 @@ def stats(start=None, end=None):
     start = dt.datetime.strptime(start, "%m%d%Y")
     end = dt.datetime.strptime(end, "%m%d%Y")
     results = session.query(*sel).\
-        filter(Measurement.date >= start).\
-        filter(Measurement.date <= end).all()
+        filter(measurement.date >= start).\
+        filter(measurement.date <= end).all()
 
     session.close()
 
