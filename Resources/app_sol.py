@@ -41,7 +41,9 @@ def welcome():
         f"Available Routes:<br/>"
         f"/api/v1.0/prcp<br/>"
         f"/api/v1.0/station<br/>"
-        f"/api/v1.0/tobs"
+        f"/api/v1.0/tobs<br/>"
+        f"/api/v1.0/tobs/start<br/>"
+        f"/api/v1.0/tobs/start/end"
     )
 
 # 2. convert the query result from 12 months of precipitation data to dic.
@@ -75,8 +77,10 @@ def stations():
 # 4. return JSON query to find the most active stations (i.e. which stations have the most rows?) dates & temp
 @app.route("/api/v1.0/tobs")
 def temprature():
-    temprature_list = session.query(measurement.date, measurement.station, measurement.tobs, func.count(measurement.station)).\
-    group_by(measurement.station).\
+    query_date = dt.date(2017, 8, 23) - dt.timedelta(days=365)
+    temprature_list = session.query(measurement.date, measurement.tobs).\
+    filter(measurement.station == 'USC00519281').\
+    filter(measurement.date >= query_date).all()
     session.close()
 
     temprature_data = list(np.ravel(temprature_list))
